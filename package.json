@@ -1,0 +1,27 @@
+{
+  "name": "teamwork",
+  "description": "Wait for multiple callback",
+  "version": "1.0.0",
+  "author": "Eran Hammer <eran@hammer.io> (http://hueniverse.com)",
+  "repository": "git://github.com/hueniverse/teamwork",
+  "main": "lib/index.js",
+  "keywords": [
+    "async",
+    "flow control",
+    "callback"
+  ],
+  "engines": {
+    "node": "4.x.x"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "code": "1.x.x",
+    "lab": "6.x.x"
+  },
+  "scripts": {
+    "test": "lab -a code -t 100 -L",
+    "test-cov-html": "lab -a code -r html -o coverage.html"
+  },
+  "license": "BSD-3-Clause"
+}
