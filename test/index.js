@@ -1,45 +1,71 @@
+'use strict';
+
 // Load modules
 
-var Code = require('code');
-var Lab = require('lab');
-var Teamwork = require('..');
+const Code = require('code');
+const Lab = require('lab');
+const Teamwork = require('..');
 
 
 // Declare internals
 
-var internals = {};
+const internals = {};
 
 
 // Test shortcuts
 
-var lab = exports.lab = Lab.script();
-var describe = lab.experiment;
-var expect = Code.expect;
-var it = lab.test;
+const lab = exports.lab = Lab.script();
+const describe = lab.experiment;
+const expect = Code.expect;
+const it = lab.test;
 
 
-describe('Team', function () {
+describe('Team', () => {
 
-    it('invokes callback when all members finish', function (done) {
+    it('invokes callback when all members finish', (done) => {
 
-        var count = '';
-        var finished = function () {
+        let count = '';
+        const finished = function () {
 
             expect(count).to.equal('12');
             done();
         };
 
-        var team = new Teamwork.Team(finished);
+        const team = new Teamwork.Team(finished);
 
-        setTimeout(team.member(function () {
+        setTimeout(team.member(() => {
 
             count += '1';
         }), 100);
 
-
-        setTimeout(team.member(function () {
+        setTimeout(team.member(() => {
 
             count += '2';
         }), 150);
+    });
+
+    it('invokes callback when all meetings are attended', (done) => {
+
+        let count = '';
+        const finished = function () {
+
+            expect(count).to.equal('12');
+            done();
+        };
+
+        const team = new Teamwork.Team(finished);
+        team.meetings(2);
+
+        setTimeout(() => {
+
+            count += '1';
+            team.attend();
+        }, 100);
+
+        setTimeout(() => {
+
+            count += '2';
+            team.attend();
+        }, 150);
     });
 });
