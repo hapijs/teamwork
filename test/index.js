@@ -22,7 +22,7 @@ const it = lab.test;
 
 describe('Team', () => {
 
-    it('invokes callback when all members finish', async () => {
+    it('resolve when all members finish', async () => {
 
         const team = new Teamwork.Team();
 
@@ -41,10 +41,31 @@ describe('Team', () => {
         expect(count).to.equal('12');
     });
 
-    it('invokes callback when all meetings are attended', async () => {
+    it('resolve when all meetings are attended', async () => {
 
         const team = new Teamwork.Team();
         team.meetings(2);
+
+        let count = '';
+        setTimeout(() => {
+
+            count += '1';
+            team.attend();
+        }, 100);
+
+        setTimeout(() => {
+
+            count += '2';
+            team.attend();
+        }, 150);
+
+        await team.work;
+        expect(count).to.equal('12');
+    });
+
+    it('resolve when all meetings are attended (constructor options)', async () => {
+
+        const team = new Teamwork.Team({ meetings: 2 });
 
         let count = '';
         setTimeout(() => {
