@@ -22,17 +22,11 @@ const it = lab.test;
 
 describe('Team', () => {
 
-    it('invokes callback when all members finish', (done) => {
+    it('invokes callback when all members finish', async () => {
+
+        const team = new Teamwork.Team();
 
         let count = '';
-        const finished = function () {
-
-            expect(count).to.equal('12');
-            done();
-        };
-
-        const team = new Teamwork.Team(finished);
-
         setTimeout(team.member(() => {
 
             count += '1';
@@ -42,20 +36,17 @@ describe('Team', () => {
 
             count += '2';
         }), 150);
+
+        await team.work;
+        expect(count).to.equal('12');
     });
 
-    it('invokes callback when all meetings are attended', (done) => {
+    it('invokes callback when all meetings are attended', async () => {
 
-        let count = '';
-        const finished = function () {
-
-            expect(count).to.equal('12');
-            done();
-        };
-
-        const team = new Teamwork.Team(finished);
+        const team = new Teamwork.Team();
         team.meetings(2);
 
+        let count = '';
         setTimeout(() => {
 
             count += '1';
@@ -67,5 +58,8 @@ describe('Team', () => {
             count += '2';
             team.attend();
         }, 150);
+
+        await team.work;
+        expect(count).to.equal('12');
     });
 });
