@@ -1,7 +1,7 @@
 {
   "name": "teamwork",
   "description": "Wait for multiple callback",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "author": "Eran Hammer <eran@hammer.io> (http://hueniverse.com)",
   "repository": "git://github.com/hueniverse/teamwork",
   "main": "lib/index.js",
@@ -11,7 +11,7 @@
     "callback"
   ],
   "engines": {
-    "node": ">=8.x.x"
+    "node": ">=8.8.0"
   },
   "dependencies": {
   },
