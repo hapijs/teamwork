@@ -24,7 +24,7 @@ describe('Team', () => {
 
     it('resolve when meeting is attended', async () => {
 
-        const team = new Teamwork.Team();
+        const team = new Teamwork();
 
         setTimeout(() => {
 
@@ -36,7 +36,7 @@ describe('Team', () => {
 
     it('resolve when all meetings are attended', async () => {
 
-        const team = new Teamwork.Team({ meetings: 2 });
+        const team = new Teamwork({ meetings: 2 });
 
         let count = '';
         setTimeout(() => {
@@ -57,7 +57,7 @@ describe('Team', () => {
 
     it('resolve with a note', async () => {
 
-        const team = new Teamwork.Team();
+        const team = new Teamwork();
 
         setTimeout(() => {
 
@@ -70,7 +70,7 @@ describe('Team', () => {
 
     it('resolve with notes', async () => {
 
-        const team = new Teamwork.Team({ meetings: 2 });
+        const team = new Teamwork({ meetings: 2 });
 
         setTimeout(() => {
 
@@ -88,7 +88,7 @@ describe('Team', () => {
 
     it('rejects on first error', async () => {
 
-        const team = new Teamwork.Team({ meetings: 2 });
+        const team = new Teamwork({ meetings: 2 });
 
         setTimeout(() => {
 
