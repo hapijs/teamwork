@@ -2,7 +2,7 @@
   "name": "teamwork",
   "description": "Wait for multiple callback",
   "version": "3.0.2",
-  "repository": "git://github.com/hueniverse/teamwork",
+  "repository": "git://github.com/hapijs/teamwork",
   "main": "lib/index.js",
   "keywords": [
     "async",
