@@ -1,7 +1,7 @@
 {
   "name": "teamwork",
   "description": "Wait for multiple callback",
-  "version": "3.0.3",
+  "version": "3.1.0",
   "repository": "git://github.com/hapijs/teamwork",
   "main": "lib/index.js",
   "keywords": [
