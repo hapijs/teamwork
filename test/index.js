@@ -102,4 +102,36 @@ describe('Team', () => {
 
         await expect(team.work).to.reject('boom');
     });
+
+    it('resets condition after initial condition met', async () => {
+
+        const team = new Teamwork({ meetings: 2 });
+
+        let count = '';
+        setTimeout(() => {
+
+            count += '1';
+            team.attend();
+        }, 100);
+
+        setTimeout(() => {
+
+            count += '2';
+            team.attend();
+        }, 150);
+
+        await team.regroup();
+
+        expect(count).to.equal('12');
+
+        setTimeout(() => {
+
+            count += '3';
+            team.attend();
+        }, 150);
+
+        await team.work;
+
+        expect(count).to.equal('123');
+    });
 });
