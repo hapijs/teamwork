@@ -22,6 +22,26 @@ const it = lab.test;
 
 describe('Team', () => {
 
+    describe('ES6 modules properties', () => {
+
+        it('the ES6 module marker is defined', () => {
+
+            expect(Teamwork.__esModule).to.be.true();
+        });
+
+        it('the default property is defined', () => {
+
+            expect(Teamwork.default).to.exist();
+            expect(Teamwork.default).to.shallow.equal(Teamwork);
+        });
+
+        it('the Teamwork property is defined', () => {
+
+            expect(Teamwork.Teamwork).to.exist();
+            expect(Teamwork.Teamwork).to.shallow.equal(Teamwork);
+        });
+    });
+
     it('resolve when meeting is attended', async () => {
 
         const team = new Teamwork();
