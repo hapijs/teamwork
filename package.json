@@ -9,14 +9,21 @@
     "flow control",
     "callback"
   ],
+  "files": [
+    "lib",
+    "index.d.ts"
+  ],
+  "types": "index.d.ts",
   "dependencies": {},
   "devDependencies": {
     "code": "5.x.x",
-    "lab": "17.x.x"
+    "lab": "17.x.x",
+    "tsd": "0.7.0"
   },
   "scripts": {
     "test": "lab -a code -t 100 -L",
-    "test-cov-html": "lab -a code -r html -o coverage.html"
+    "test-cov-html": "lab -a code -r html -o coverage.html",
+    "test-types": "tsd"
   },
   "license": "BSD-3-Clause"
 }
