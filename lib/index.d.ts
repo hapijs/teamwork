@@ -10,7 +10,7 @@ export interface Options {
 
 type ElementOf<T> = T extends (infer E)[] ? E : T;
 
-export class Teamwork<Results extends any | any[] = void> {
+export class Team<Results extends any | any[] = void> {
     /**
      * Start a new team work.
      * @param options Configuration of the team work.
@@ -34,5 +34,3 @@ export class Teamwork<Results extends any | any[] = void> {
      */
     regroup(options?: Options) : Promise<void>;
 }
-
-export default Teamwork;
