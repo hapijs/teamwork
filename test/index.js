@@ -14,7 +14,7 @@ const expect = Code.expect;
 
 describe('Team', () => {
 
-    it('resolve when meeting is attended', async () => {
+    it('resolves when meeting is attended', async () => {
 
         const team = new Teamwork.Team();
 
@@ -26,7 +26,7 @@ describe('Team', () => {
         await team.work;
     });
 
-    it('resolve when all meetings are attended', async () => {
+    it('resolves when all meetings are attended', async () => {
 
         const team = new Teamwork.Team({ meetings: 2 });
 
@@ -44,10 +44,27 @@ describe('Team', () => {
         }, 150);
 
         await team.work;
+
         expect(count).to.equal('12');
+
+        expect(() => team.attend()).not.to.throw();
+        expect(() => team.attend(new Error())).not.to.throw();
     });
 
-    it('resolve with a note', async () => {
+    it('throws when too many meetings attended', async () => {
+
+        const team = new Teamwork.Team({ meetings: 2, strict: true });
+
+        team.attend();
+        team.attend();
+
+        await team.work;
+
+        expect(() => team.attend()).to.throw('Unscheduled meeting');
+        expect(() => team.attend(new Error())).to.throw('Unscheduled meeting');
+    });
+
+    it('resolves with a note', async () => {
 
         const team = new Teamwork.Team();
 
@@ -60,7 +77,7 @@ describe('Team', () => {
         expect(note).to.equal('1');
     });
 
-    it('resolve with notes', async () => {
+    it('resolves with notes', async () => {
 
         const team = new Teamwork.Team({ meetings: 2 });
 
@@ -97,7 +114,7 @@ describe('Team', () => {
 
     it('resets condition after initial condition met', async () => {
 
-        const team = new Teamwork.Team({ meetings: 2 });
+        const team = new Teamwork.Team({ meetings: 2, strict: true });
 
         let count = '';
         setTimeout(() => {
@@ -112,7 +129,7 @@ describe('Team', () => {
             team.attend();
         }, 150);
 
-        await team.regroup();
+        await team.regroup({ strict: true });
 
         expect(count).to.equal('12');
 

@@ -12,6 +12,7 @@ const { expect } = Lab.types;
 
 expect.type<Teamwork.Team>(new Teamwork.Team());
 expect.type<Teamwork.Team>(new Teamwork.Team({ meetings: 2 }));
+expect.type<Teamwork.Team>(new Teamwork.Team({ strict: true }));
 expect.error(new Teamwork.Team({ foo: true }));
 expect.error(new Teamwork.Team({ meetings: 'foo' }));
 expect.type<Promise<void>>(new Teamwork.Team().work);
@@ -38,6 +39,8 @@ expect.type<Promise<boolean[]>>(new Teamwork.Team<boolean[]>().work);
 // Regroup tests
 
 expect.type<Promise<void>>(new Teamwork.Team().regroup());
+expect.type<Promise<void>>(new Teamwork.Team().regroup({ meetings: 2 }));
+expect.type<Promise<void>>(new Teamwork.Team().regroup({ strict: true }));
 
 
 // Events
