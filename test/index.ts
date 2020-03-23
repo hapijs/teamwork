@@ -1,9 +1,12 @@
+import * as Code from '@hapi/code';
 import * as Lab from '@hapi/lab';
 import * as Teamwork from '..';
 
 
 const { expect } = Lab.types;
 
+
+// Team
 
 // Constructor tests
 
@@ -35,3 +38,31 @@ expect.type<Promise<boolean[]>>(new Teamwork.Team<boolean[]>().work);
 // Regroup tests
 
 expect.type<Promise<void>>(new Teamwork.Team().regroup());
+
+
+// Events
+
+const events = new Teamwork.Events<string>();
+expect.error(events.emit(1));
+
+const iterator = events.iterator();
+expect.type<AsyncIterator<string>>(iterator);
+
+
+const test = async function () {
+
+    const events = new Teamwork.Events<number>();
+    events.emit(1);
+    events.emit(2);
+    events.emit(3);
+    events.end();
+
+    const items = [];
+    for await (const item of events.iterator()) {
+        items.push(item);
+    }
+
+    Code.expect(items).to.equal([1, 2, 3]);
+};
+
+test();

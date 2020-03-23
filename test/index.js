@@ -127,3 +127,47 @@ describe('Team', () => {
         expect(count).to.equal('123');
     });
 });
+
+describe('Events', () => {
+
+    it('iterates over events', async () => {
+
+        const events = new Teamwork.Events();
+        const iterator = events.iterator();
+
+        expect(Teamwork.Events.isIterator(iterator)).to.be.true();
+
+        const collect = new Promise(async (resolve) => {
+
+            const items = [];
+            for await (const item of iterator) {
+                items.push(item);
+            }
+
+            resolve(items);
+        });
+
+        events.emit(1);
+        events.emit(2);
+        events.emit(3);
+        events.end();
+
+        expect(await collect).to.equal([1, 2, 3]);
+    });
+
+    it('iterates over events (queued)', async () => {
+
+        const events = new Teamwork.Events();
+        events.emit(1);
+        events.emit(2);
+        events.emit(3);
+        events.end();
+
+        const items = [];
+        for await (const item of events.iterator()) {
+            items.push(item);
+        }
+
+        expect(items).to.equal([1, 2, 3]);
+    });
+});
