@@ -6,7 +6,7 @@
 export class Team<Results extends any | any[] = void> {
     /**
      * Start a new team work.
-     * 
+     *
      * @param options Configuration of the team work.
      */
     constructor(options?: Team.Options);
@@ -18,14 +18,14 @@ export class Team<Results extends any | any[] = void> {
 
     /**
      * Attend a single meeting.
-     * 
+     *
      * @param note An optional note that will be included in the work's results. If an error is provided, the work will be immediately rejected with that error.
      */
     attend(note?: Error | Team.ElementOf<Results>): void;
 
     /**
      * Wait for the current work to be done and start another team work.
-     * 
+     *
      * @param options New configuration of the team work.
      *
      * @returns a promise that resolves when the current work is done.
@@ -41,10 +41,17 @@ export namespace Team {
     export interface Options {
         /**
          * Number of meetings this team should attend before delivering work.
-         * 
+         *
          * @default 1
          */
         readonly meetings?: number;
+
+        /**
+         * Throws when the team attends more than the expected number of `meetings`.
+         *
+         * @default false
+         */
+        readonly strict?: boolean;
     }
 
     type ElementOf<T> = T extends (infer E)[] ? E : T;
@@ -65,7 +72,7 @@ export class Events<T> {
 
     /**
      * Emits an event to be consumed via the iterator.
-     * 
+     *
      * @param value
      */
     emit(value: T): void;
