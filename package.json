@@ -1,7 +1,7 @@
 {
   "name": "@hapi/teamwork",
   "description": "Wait for multiple callback",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "repository": "git://github.com/hapijs/teamwork",
   "main": "lib/index.js",
   "files": [
