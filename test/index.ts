@@ -12,7 +12,6 @@ expect.type<Teamwork>(new Teamwork({ meetings: 2 }));
 expect.error(new Teamwork({ foo: true }));
 expect.error(new Teamwork({ meetings: 'foo' }));
 expect.type<Promise<void>>(new Teamwork().work);
-expect.type<void>(await new Teamwork().work);
 
 
 // Attend tests
