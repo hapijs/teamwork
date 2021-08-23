@@ -16,9 +16,15 @@
   "engines": {
     "node": ">=12.0.0"
   },
+  "eslintConfig": {
+    "extends": [
+      "plugin:@hapi/module"
+    ]
+  },
   "dependencies": {},
   "devDependencies": {
     "@hapi/code": "8.x.x",
+    "@hapi/eslint-plugin": "*",
     "@hapi/lab": "24.x.x",
     "typescript": "~4.0.2"
   },
