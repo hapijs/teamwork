@@ -143,6 +143,18 @@ describe('Team', () => {
 
         expect(count).to.equal('123');
     });
+
+    it('exposes private notes as a static accessor', async () => {
+
+        const team = new Teamwork.Team();
+
+        team.attend('1');
+
+        const internalNotes = Teamwork.Team._notes(team);
+        expect(internalNotes).to.equal(['1']);
+
+        await team.work;
+    });
 });
 
 describe('Events', () => {
