@@ -146,14 +146,56 @@ describe('Team', () => {
 
     it('exposes private notes as a static accessor', async () => {
 
-        const team = new Teamwork.Team();
+        const team = new Teamwork.Team({ meetings: 2 });
 
         team.attend('1');
 
         const internalNotes = Teamwork.Team._notes(team);
         expect(internalNotes).to.equal(['1']);
 
+        team.attend('2');
+
         await team.work;
+    });
+
+    it('clears notes and doesn\'t add new notes when meeting is done', async () => {
+
+        const team = new Teamwork.Team({ meetings: 2 });
+
+        setTimeout(() => {
+
+            team.attend('1');
+        }, 100);
+
+        setTimeout(() => {
+
+            team.attend('2');
+        }, 150);
+
+        const notes = await team.work;
+        expect(notes).to.equal(['1', '2']);
+        expect(Teamwork.Team._notes(team)).to.be.null();
+
+        expect(() => team.attend('3')).to.not.throw();
+        expect(Teamwork.Team._notes(team)).to.be.null();
+    });
+
+    it('clears notes when attending with an error', async () => {
+
+        const team = new Teamwork.Team({ meetings: 2 });
+
+        setTimeout(() => {
+
+            team.attend('1');
+        }, 100);
+
+        setTimeout(() => {
+
+            team.attend(new Error());
+        }, 150);
+
+        await expect(team.work).to.reject();
+        expect(Teamwork.Team._notes(team)).to.be.null();
     });
 });
 
