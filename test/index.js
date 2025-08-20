@@ -235,21 +235,156 @@ describe('Events', () => {
         events.end();
 
         expect(await collect).to.equal([1, 2, 3]);
+        expect(Teamwork.Events._iterators(events)).to.equal(new Set());
     });
 
     it('iterates over events (queued)', async () => {
 
         const events = new Teamwork.Events();
+        const iterator = events.iterator();
+
         events.emit(1);
         events.emit(2);
         events.emit(3);
         events.end();
 
         const items = [];
-        for await (const item of events.iterator()) {
+        for await (const item of iterator) {
             items.push(item);
         }
 
         expect(items).to.equal([1, 2, 3]);
+        expect(Teamwork.Events._iterators(events)).to.equal(new Set());
+    });
+
+    it('only iterates over new events after iterator() call', async () => {
+
+        const events = new Teamwork.Events();
+
+        events.emit(1);
+
+        const iterator = events.iterator();
+        events.emit(2);
+        events.emit(3);
+        events.end();
+
+        const items = [];
+        for await (const item of iterator) {
+            items.push(item);
+        }
+
+        expect(items).to.equal([2, 3]);
+        expect(Teamwork.Events._iterators(events)).to.equal(new Set());
+    });
+
+    it('returns done for consumed iterators', async () => {
+
+        const events = new Teamwork.Events();
+        const iterator = events.iterator();
+
+        events.emit(1);
+        events.emit(2);
+        events.emit(3);
+        events.end();
+
+        const items = [];
+        for await (const item of iterator) {
+            items.push(item);
+        }
+
+        expect(iterator.next()).to.equal({ done: true });
+
+        expect(items).to.equal([1, 2, 3]);
+        expect(Teamwork.Events._iterators(events)).to.equal(new Set());
+    });
+
+    it('can use break without leaking', async () => {
+
+        const events = new Teamwork.Events();
+        const iterator = events.iterator();
+
+        events.emit(1);
+        events.emit(2);
+
+        const items = [];
+        for await (const item of iterator) {
+            items.push(item);
+            break;
+        }
+
+        expect(items).to.equal([1]);
+        expect(Teamwork.Events._iterators(events)).to.equal(new Set());
+    });
+
+    it('can throw without leaking', async () => {
+
+        const events = new Teamwork.Events();
+        const iterator = events.iterator();
+
+        events.emit(1);
+        events.emit(2);
+
+        const items = [];
+        await expect((async () => {
+
+            for await (const item of iterator) {
+                items.push(item);
+                throw new Error('fail');
+            }
+        })()).to.reject('fail');
+
+        expect(items).to.equal([1]);
+        expect(Teamwork.Events._iterators(events)).to.equal(new Set());
+    });
+
+    it('works with multiple iterators (serial)', async () => {
+
+        const events = new Teamwork.Events();
+        const iter1 = events.iterator();
+        const iter2 = events.iterator();
+
+        events.emit(1);
+        events.emit(2);
+        events.emit(3);
+        events.end();
+
+        const items1 = [];
+        for await (const item1 of iter1) {
+            items1.push(item1);
+        }
+
+        const items2 = [];
+        for await (const item2 of iter2) {
+            items2.push(item2);
+        }
+
+        expect(items1).to.equal([1, 2, 3]);
+        expect(items2).to.equal([1, 2, 3]);
+    });
+
+    it('works with multiple iterators (interleaved)', async () => {
+
+        const events = new Teamwork.Events();
+        const iter1 = events.iterator();
+        const iter2 = events.iterator();
+
+        events.emit(1);
+        events.emit(2);
+        events.emit(3);
+        events.end();
+
+        const items1 = [];
+        const items2 = [];
+        for await (const item1 of iter1) {
+            items1.push(item1);
+            if (items2.length === 0) {
+                for await (const item2 of iter2) {
+                    items2.push(item2);
+                }
+            }
+        }
+
+        expect(items1).to.equal([1, 2, 3]);
+        expect(items2).to.equal([1, 2, 3]);
     });
 });
