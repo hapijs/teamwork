@@ -198,6 +198,23 @@ describe('Team', () => {
         expect(Teamwork.Team._notes(team)).to.be.null();
     });
 
+    it('immediately resolves non-strict empty meetings with null', async () => {
+
+        const team = new Teamwork.Team({ meetings: 0, strict: false });
+
+        const notes = await team.work;
+        expect(notes).to.equal(null);
+    });
+
+    it('throws error on invalid meetings', () => {
+
+        expect(() => new Teamwork.Team({ meetings: 0, strict: true })).to.throw('Invalid meetings value');
+        expect(() => new Teamwork.Team({ meetings: 0.5 })).to.throw('Invalid meetings value');
+        expect(() => new Teamwork.Team({ meetings: -1 })).to.throw('Invalid meetings value');
+        expect(() => new Teamwork.Team({ meetings: NaN })).to.throw('Invalid meetings value');
+        expect(() => new Teamwork.Team({ meetings: '' })).to.throw('Invalid meetings value');
+    });
+
     it('regroup works after team error', async () => {
 
         const team = new Teamwork.Team({ meetings: 2, strict: true });
