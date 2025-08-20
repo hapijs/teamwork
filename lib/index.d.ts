@@ -44,14 +44,15 @@ export namespace Team {
          *
          * @default 1
          */
-        readonly meetings?: number;
+        readonly meetings?: number | undefined;
 
         /**
-         * Throws when the team attends more than the expected number of `meetings`.
+         * Throws when the team attends more than the expected number of `meetings`,
+         * or if scheduling an empty meeting.
          *
          * @default false
          */
-        readonly strict?: boolean;
+        readonly strict?: boolean | undefined;
     }
 
     type ElementOf<T> = T extends (infer E)[] ? E : T;
