@@ -197,6 +197,17 @@ describe('Team', () => {
         await expect(team.work).to.reject();
         expect(Teamwork.Team._notes(team)).to.be.null();
     });
+
+    it('regroup works after team error', async () => {
+
+        const team = new Teamwork.Team({ meetings: 2, strict: true });
+        team.attend(new Error('failed'));
+
+        const regroup = team.regroup();
+
+        await expect(team.work).to.reject('failed');
+        await expect(regroup).to.not.reject();
+    });
 });
 
 describe('Events', () => {
