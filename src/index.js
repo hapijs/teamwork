@@ -1,10 +1,4 @@
-'use strict';
-
-const internals = {};
-
-
-exports.Team = class {
-
+export class Team {
     #meetings = null;
     #count = null;
     #notes = null;
@@ -12,19 +6,15 @@ exports.Team = class {
     #strict = false;
 
     constructor(options) {
-
         this._init(options);
     }
 
     static _notes(instance) {
-
         return instance.#notes;
     }
 
     _init(options = {}) {
-
         this.work = new Promise((resolve, reject) => {
-
             this._resolve = resolve;
             this._reject = reject;
         });
@@ -45,24 +35,20 @@ exports.Team = class {
         this.#notes = [];
         this.#done = false;
         this.#strict = strict;
-
     }
 
     _finalize(err, note) {
-
         this.#done = true;
         this.#notes = null;
 
         if (err) {
             this._reject(err);
-        }
-        else {
+        } else {
             this._resolve(note);
         }
     }
 
     attend(note) {
-
         if (this.#done) {
             if (this.#strict) {
                 throw new Error('Unscheduled meeting');
@@ -87,34 +73,27 @@ exports.Team = class {
     }
 
     async regroup(options) {
-
         try {
             await this.work;
-        }
-        catch {}
+        } catch {}
 
         this._init(options);
     }
-};
+}
 
-
-exports.Events = class {
-
+export class Events {
     #iterators = new Set();
 
     static _iterators(instance) {
-
         return instance.#iterators;
     }
 
     static isIterator(iterator) {
-
-        return iterator instanceof internals.EventsIterator;
+        return iterator instanceof EventsIterator;
     }
 
     iterator() {
-
-        const iterator = new internals.EventsIterator(this);
+        const iterator = new EventsIterator(this);
 
         this.#iterators.add(iterator);
 
@@ -122,45 +101,37 @@ exports.Events = class {
     }
 
     emit(value) {
-
         for (const iterator of this.#iterators) {
             iterator._queue({ value, done: false });
         }
     }
 
     end() {
-
         for (const iterator of this.#iterators) {
             iterator._queue({ done: true });
         }
     }
 
     _remove(iterator) {
-
         this.#iterators.delete(iterator);
     }
-};
+}
 
-
-internals.EventsIterator = class {
-
+class EventsIterator {
     #events;
 
     #pending = null;
     #queue = [];
 
     constructor(events) {
-
         this.#events = events;
     }
 
     [Symbol.asyncIterator]() {
-
         return this;
     }
 
     next() {
-
         if (this.#queue.length) {
             return Promise.resolve(this.#queue.shift());
         }
@@ -169,25 +140,22 @@ internals.EventsIterator = class {
             return { done: true };
         }
 
-        this.#pending = new exports.Team();
+        this.#pending = new Team();
         return this.#pending.work;
     }
 
     return() {
-
         this._cleanup();
 
         return { done: true };
     }
 
     _cleanup() {
-
         this.#events?._remove(this);
         this.#events = null;
     }
 
     _queue(item) {
-
         if (item.done) {
             this._cleanup();
         }
@@ -195,9 +163,8 @@ internals.EventsIterator = class {
         if (this.#pending) {
             this.#pending.attend(item);
             this.#pending = null;
-        }
-        else {
+        } else {
             this.#queue.push(item);
         }
     }
-};
+}

@@ -1,7 +1,6 @@
 /**
- * Team bridges between callbacks and promises. Used to convert callback-based
- * interfaces to a promise-based result including support for collecting multiple
- * callback events into a single promise.
+ * Team bridges between callbacks and promises. Used to convert callback-based interfaces to a promise-based result
+ * including support for collecting multiple callback events into a single promise.
  */
 export class Team<Results extends any | any[] = void> {
     /**
@@ -11,15 +10,14 @@ export class Team<Results extends any | any[] = void> {
      */
     constructor(options?: Team.Options);
 
-    /**
-     * Resulting work when all the meetings are done.
-     */
+    /** Resulting work when all the meetings are done. */
     work: Promise<Results>;
 
     /**
      * Attend a single meeting.
      *
-     * @param note An optional note that will be included in the work's results. If an error is provided, the work will be immediately rejected with that error.
+     * @param note An optional note that will be included in the work's results. If an error is provided, the work will
+     *   be immediately rejected with that error.
      */
     attend(note?: Error | Team.ElementOf<Results>): void;
 
@@ -27,17 +25,13 @@ export class Team<Results extends any | any[] = void> {
      * Wait for the current work to be done and start another team work.
      *
      * @param options New configuration of the team work.
-     *
-     * @returns a promise that resolves when the current work is done.
+     * @returns A promise that resolves when the current work is done.
      */
-    regroup(options?: Team.Options) : Promise<void>;
+    regroup(options?: Team.Options): Promise<void>;
 }
 
 export namespace Team {
-
-    /**
-     * Configuration of the team work.
-     */
+    /** Configuration of the team work. */
     export interface Options {
         /**
          * Number of meetings this team should attend before delivering work.
@@ -47,8 +41,7 @@ export namespace Team {
         readonly meetings?: number | undefined;
 
         /**
-         * Throws when the team attends more than the expected number of `meetings`,
-         * or if scheduling an empty meeting.
+         * Throws when the team attends more than the expected number of `meetings`, or if scheduling an empty meeting.
          *
          * @default false
          */
@@ -58,16 +51,12 @@ export namespace Team {
     type ElementOf<T> = T extends (infer E)[] ? E : T;
 }
 
-
-/**
- * Events emitter via an async iterator interface.
- */
+/** Events emitter via an async iterator interface. */
 export class Events<T> {
-
     /**
      * Returns a standard async iterator interface object.
      *
-     * @returns async iterator interface object.
+     * @returns Async iterator interface object.
      */
     iterator(): Events.Iterator<T>;
 
@@ -78,16 +67,12 @@ export class Events<T> {
      */
     emit(value: T): void;
 
-    /**
-     * Informs the iterator that no new events will be emitted.
-     */
+    /** Informs the iterator that no new events will be emitted. */
     end(): void;
 }
 
 export namespace Events {
-
     class Iterator<T> implements AsyncIterator<T> {
-
         constructor(events: Events<T>);
         [Symbol.asyncIterator](): AsyncIterator<T>;
         next(): Promise<IteratorResult<T>>;
